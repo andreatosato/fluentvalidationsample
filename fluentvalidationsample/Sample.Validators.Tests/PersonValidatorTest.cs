@@ -1,4 +1,5 @@
 using FluentValidation.TestHelper;
+using Sample.Validators.Services;
 using System;
 using System.Linq;
 using Xunit;
@@ -10,7 +11,7 @@ namespace Sample.Validators.Tests
         private PersonValidator _personValidatior;
         public PersonValidatorTest()
         {
-            _personValidatior = new PersonValidator();
+            _personValidatior = new PersonValidator(new MyService());
         }
 
         [Fact]
