@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using FluentValidation.Validators;
+using Sample.Validators.Services;
 using Sample.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,21 @@ namespace Sample.Validators
     {
         public const string ValidaMail = "ValidaMail";
         public const string ValidaNumeriTelefono = "ValidaNumeriTelefono";
+        private readonly IMyService _myService;
 
-        public PersonValidator()
+        public PersonValidator(IMyService myService)
         {
+            _myService = myService;
+
             // Common rules
             RuleFor(x => x.Birthday).ExclusiveBetween(DateTime.Now.AddYears(-150), DateTime.Now);
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Surname).NotEmpty();
+            RuleFor(x => x.Surname).NotEmpty().Custom((x,y) => {
+                if (_myService.UserExists(x))
+                {
+                    y.AddFailure(new ValidationFailure("Surname", "User not exists"));
+                }
+            });
             RuleFor(x => x.Address).Cascade(CascadeMode.Continue);
 
             // Set Rule
@@ -35,9 +44,6 @@ namespace Sample.Validators
                 RuleFor(x => x.PhoneNumber).NotEmpty().SetValidator(new InternationPhoneRule());
             });
         }
-
-
-        
     }
 
     public class InternationPhoneRule : PropertyValidator
