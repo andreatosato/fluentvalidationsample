@@ -19,7 +19,7 @@ namespace Sample.Validators.Tests
         {
             var errors = _personValidatior.ShouldHaveValidationErrorFor(p => p.Name, null as string);
             Assert.NotEmpty(errors);
-            string errorCode = errors.ToList().First().ErrorCode;
+            string errorCode = errors.ToList().First(x => x.PropertyName == "Name").ErrorCode;
             Assert.Equal("NotEmptyValidator", errorCode);
         }
 
