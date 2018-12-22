@@ -17,7 +17,7 @@ namespace Sample.Validators
         public PersonValidator()
         {
             // Common rules
-            RuleFor(x => x.Birthday).ExclusiveBetween(DateTime.Now.AddYears(150), DateTime.Now);
+            //RuleFor(x => x.Birthday).ExclusiveBetween(DateTime.Now.AddYears(150), DateTime.Now);
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Surname).NotEmpty();
             RuleFor(x => x.Address).Cascade(CascadeMode.Continue);
