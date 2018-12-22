@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Sample.ViewModels;
 
@@ -13,6 +10,16 @@ namespace Sample.Controllers
     {
         [HttpPost("Person")]
         public IActionResult Post([FromBody] PersonViewModel value)
+        {
+            if (ModelState.IsValid)
+                return Ok();
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost("PersonRule")]
+        public IActionResult PostRule(
+            [CustomizeValidator(RuleSet = Validators.PersonValidator.ValidaNumeriTelefono)]
+            [FromBody] PersonViewModel value)
         {
             if (ModelState.IsValid)
                 return Ok();
